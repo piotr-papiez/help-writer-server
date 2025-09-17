@@ -31,17 +31,18 @@ export const loadArticles = async (req, res) => {
 
 // POST: /api/articles
 export const createArticle = async (req, res) => {
+    console.log(req.body);
     const { title, creationDate, lastModificationDate, content } = req.body;
 
     try {
-        await Article.create({
+        const newArticle = await Article.create({
             title,
             creationDate,
             lastModificationDate,
             content
         });
 
-        res.status(201).json({ message: "Article successfully created" });
+        res.status(201).json({ newArticleId: newArticle._id });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error while creating new article" });
