@@ -32,14 +32,19 @@ export const loadArticles = async (req, res) => {
 // POST: /api/articles
 export const createArticle = async (req, res) => {
     console.log(req.body);
-    const { title, creationDate, lastModificationDate, content } = req.body;
+    const { title } = req.body;
 
     try {
+        const titleAlreadyExists = await Article.find({ title: title });
+        console.log(titleAlreadyExists);
+
+        if (titleAlreadyExists.length > 0) return res.status(409).json({ error: "Title already exists" });
+
         const newArticle = await Article.create({
             title,
-            creationDate,
-            lastModificationDate,
-            content
+            creationDate: new Date(),
+            lastModificationDate: new Date(),
+            content: "[]"
         });
 
         res.status(201).json({ newArticleId: newArticle._id });
