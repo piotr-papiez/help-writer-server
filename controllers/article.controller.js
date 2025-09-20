@@ -5,7 +5,6 @@ import Article from "../models/article.model.js";
 // GET: /api/articles/:articleId
 export const loadArticle = async (req, res) => {
     const articleId = req.params.articleId;
-    console.log(articleId);
 
     try {
         const article = await Article.findById(articleId);
@@ -31,7 +30,6 @@ export const loadArticles = async (req, res) => {
 
 // POST: /api/articles
 export const createArticle = async (req, res) => {
-    console.log(req.body);
     const { title } = req.body;
 
     try {
@@ -53,6 +51,37 @@ export const createArticle = async (req, res) => {
         res.status(500).json({ error: "Server error while creating new article" });
     }
 };
+
+// POST: /api/copy-article/:articleId
+export const copyArticle = async (req, res) => {
+    const articleId = req.params.articleId;
+    const { title } = req.body;
+
+    try {
+        const baseArticle = await Article.findById(articleId);
+
+        if (!baseArticle) return res.status(404).json({ error: "Article not found" });
+        
+        const titleAlreadyExists = await Article.find({ title: title });
+
+        if (titleAlreadyExists.length > 0) return res.status(409).json({ error: "Title already exists" });
+
+        console.log("AA:", baseArticle);
+
+        const copyArticle = {
+            title,
+            creationDate: new Date(),
+            lastModificationDate: new Date(),
+            content: baseArticle.content
+        }
+
+        const newArticle = await Article.create(copyArticle);
+
+        res.status(201).json({ newArticleId: newArticle._id });
+    } catch (error) {
+        console.error(error);
+    }
+}
 
 // PUT: /api/articles/:articleId
 export const updateArticle = async (req, res) => {

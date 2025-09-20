@@ -4,6 +4,7 @@ import {
     loadArticle,
     loadArticles,
     createArticle,
+    copyArticle,
     updateArticle
 } from "../controllers/article.controller.js";
 
@@ -13,6 +14,7 @@ router.get("/articles/:articleId", loadArticle);
 router.get("/articles", loadArticles);
 
 router.post("/articles", createArticle);
+router.post("/copy-article/:articleId", copyArticle);
 
 router.put("/articles/:articleId", updateArticle);
 
