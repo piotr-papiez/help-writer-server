@@ -1,6 +1,7 @@
 import { Router } from "express";
 
 import {
+    deleteArticle,
     loadArticle,
     loadArticles,
     createArticle,
@@ -9,6 +10,8 @@ import {
 } from "../controllers/article.controller.js";
 
 const router = Router();
+
+router.delete("/articles/:articleId", deleteArticle);
 
 router.get("/articles/:articleId", loadArticle);
 router.get("/articles", loadArticles);

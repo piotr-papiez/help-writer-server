@@ -2,6 +2,22 @@ import xss from "xss";
 
 import Article from "../models/article.model.js";
 
+// DELETE: /api/articles/:articleId
+export const deleteArticle = async (req, res) => {
+    const articleId = req.params.articleId;
+    console.log(articleId);
+
+    try {
+        const deletedArticle = await Article.findByIdAndDelete(articleId);
+
+        if (!deletedArticle) return res.status(404).json({ error: "Article not found" });
+
+        res.status(200).json({ message: "Article successfully deleted" });
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 // GET: /api/articles/:articleId
 export const loadArticle = async (req, res) => {
     const articleId = req.params.articleId;
@@ -66,8 +82,6 @@ export const copyArticle = async (req, res) => {
 
         if (titleAlreadyExists.length > 0) return res.status(409).json({ error: "Title already exists" });
 
-        console.log("AA:", baseArticle);
-
         const copyArticle = {
             title,
             creationDate: new Date(),
@@ -76,6 +90,7 @@ export const copyArticle = async (req, res) => {
         }
 
         const newArticle = await Article.create(copyArticle);
+        console.log("AA:", newArticle);
 
         res.status(201).json({ newArticleId: newArticle._id });
     } catch (error) {
@@ -86,7 +101,7 @@ export const copyArticle = async (req, res) => {
 // PUT: /api/articles/:articleId
 export const updateArticle = async (req, res) => {
     const articleId = req.params.articleId;
-    const { title, lastModificationDate, content } = req.body;
+    const { title, content } = req.body;
     const article = await Article.findById(articleId);
 
     if (!article) return res.status(404).json({ error: "Article not found" });
@@ -94,7 +109,7 @@ export const updateArticle = async (req, res) => {
     try {
         await Article.findByIdAndUpdate(articleId, {
             title,
-            lastModificationDate,
+            lastModificationDate: new Date(),
             content
         }); console.log("@@@@@");
 
