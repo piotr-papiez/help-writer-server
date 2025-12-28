@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 // Routes
 import articleRoutes from "./routes/article.routes.js";
+import fileRoutes from "./routes/file.routes.js";
 
 // Environment
 const PORT = process.env.PORT;
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(cors({ origin: CLIENT_URL }));
 
 app.use("/api", articleRoutes);
+app.use("/api", fileRoutes);
 
 // Start server
 async function startServer() {
