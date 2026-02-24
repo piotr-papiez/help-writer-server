@@ -113,7 +113,7 @@ export const updateArticle = async (req, res) => {
             content
         }); console.log("@@@@@");
 
-        res.status(200).json({ message: "Article successfully updated" });
+        res.status(200).json({ message: "Artykuł został zaktualizowany." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error while updating article" })
